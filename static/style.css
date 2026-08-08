@@ -262,3 +262,26 @@ body {
     padding: 4px 10px;
     font-size: 0.8rem;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+    }
+
+    .chat-container {
+        height: 100vh;
+        max-width: 100%;
+        border-radius: 0;
+        border: none;
+    }
+
+    .admin-actions {
+        flex-direction: column;
+    }
+
+    .message-item {
+        max-width: 88%;
+    }
+}
+
