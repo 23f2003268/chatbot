@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <header class="chat-header admin-header">
+            <h2>Private Chat - Admin</h2>
+            <div class="user-info">
+                <span>Admin: {{ username }}</span>
+                <form action="/logout" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-secondary btn-sm">Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <div id="messages-list" class="messages-list">
+            <!-- Messages rendered dynamically via JS polling -->
+        </div>
+
+        <div class="chat-controls">
+            <form id="text-form" class="input-form">
+                <input type="text" id="text-input" placeholder="Type a message..." required autocomplete="off">
+                <button type="submit" class="btn">Send</button>
+            </form>
+
+            <form id="image-form" class="image-upload-form">
+                <label for="image-file" class="btn btn-secondary">Upload Image</label>
+                <input type="file" id="image-file" accept="image/png, image/jpeg, image/webp" style="display:none;">
+                <span id="selected-file-name" class="file-name">No file selected</span>
+                <button type="submit" class="btn btn-secondary">Send Image</button>
+            </form>
+
+            <div class="admin-actions">
+                <button id="clear-screen-btn" class="btn btn-warning">Clear User Screen</button>
+                <button id="delete-all-btn" class="btn btn-danger">Delete All Messages</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+</body>
+</html>
