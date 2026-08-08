@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedFileName = document.getElementById('selected-file-name');
     const clearScreenBtn = document.getElementById('clear-screen-btn');
     const deleteAllBtn = document.getElementById('delete-all-btn');
+    const exportJsonBtn = document.getElementById('export-json-btn');
 
     let lastMessagesJson = '';
 
@@ -160,7 +161,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Admin: Export Chat JSON
+    if (exportJsonBtn) {
+        exportJsonBtn.addEventListener('click', () => {
+            window.location.href = '/api/admin/export-json';
+        });
+    }
+
     // Admin: Clear user screen
+
     if (clearScreenBtn) {
         clearScreenBtn.addEventListener('click', async () => {
             try {

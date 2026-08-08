@@ -180,3 +180,20 @@ def delete_all():
     db.session.commit()
 
     return jsonify({'status': 'ok', 'message': 'All messages deleted permanently'})
+
+@chat_bp.route('/api/admin/export-json', methods=['GET'])
+@admin_required
+def export_json():
+    messages = Message.query.order_by(Message.created_at.asc(), Message.id.asc()).all()
+    export_data = {
+        'exported_at': datetime.utcnow().isoformat() + 'Z',
+        'total_messages': len(messages),
+        'messages': [m.to_dict() for m in messages]
+    }
+    filename = f"chat_export_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+    
+    response = jsonify(export_data)
+    response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+    response.headers['Content-Type'] = 'application/json'
+    return response
+

@@ -233,3 +233,22 @@ def test_logout_invalidation(client):
     # Try accessing API again with old session
     res_after = client.get('/api/messages')
     assert res_after.status_code == 401
+
+def test_export_chat_json(client, app):
+    # User cannot export
+    login_as(client, 'user', 'userpass123')
+    res_user = client.get('/api/admin/export-json')
+    assert res_user.status_code == 403
+
+    # Admin can export JSON
+    login_as(client, 'admin', 'adminpass123')
+    client.post('/api/messages', json={'text': 'Test Export Message'})
+    
+    res_admin = client.get('/api/admin/export-json')
+    assert res_admin.status_code == 200
+    assert res_admin.content_type == 'application/json'
+    data = res_admin.get_json()
+    assert 'messages' in data
+    assert len(data['messages']) >= 1
+    assert data['messages'][-1]['text'] == 'Test Export Message'
+
