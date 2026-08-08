@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageForm = document.getElementById('image-form');
     const imageFileInput = document.getElementById('image-file');
     const selectedFileName = document.getElementById('selected-file-name');
-    const clearScreenBtn = document.getElementById('clear-screen-btn');
-    const deleteAllBtn = document.getElementById('delete-all-btn');
-    const exportJsonBtn = document.getElementById('export-json-btn');
 
     let lastMessagesJson = '';
 
@@ -18,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
 
-    // Fetch messages from server API
+    // Fetch messages from server API (server enforces 3-min / 10-msg limit)
     async function fetchMessages() {
         try {
             const res = await fetch('/api/messages');
@@ -157,60 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 console.error('Error uploading image:', err);
-            }
-        });
-    }
-
-    // Admin: Export Chat JSON
-    if (exportJsonBtn) {
-        exportJsonBtn.addEventListener('click', () => {
-            window.location.href = '/api/admin/export-json';
-        });
-    }
-
-    // Admin: Clear user screen
-
-    if (clearScreenBtn) {
-        clearScreenBtn.addEventListener('click', async () => {
-            try {
-                const res = await fetch('/api/admin/clear-user-screen', { method: 'POST' });
-                if (res.status === 401) {
-                    window.location.href = '/login';
-                    return;
-                }
-                if (res.ok) {
-                    fetchMessages();
-                } else {
-                    const errData = await res.json();
-                    alert(errData.error || 'Failed to clear screen');
-                }
-            } catch (err) {
-                console.error('Error clearing screen:', err);
-            }
-        });
-    }
-
-    // Admin: Delete all messages permanently
-    if (deleteAllBtn) {
-        deleteAllBtn.addEventListener('click', async () => {
-            if (!confirm('Are you sure you want to PERMANENTLY delete all messages and images?')) {
-                return;
-            }
-
-            try {
-                const res = await fetch('/api/admin/delete-all', { method: 'POST' });
-                if (res.status === 401) {
-                    window.location.href = '/login';
-                    return;
-                }
-                if (res.ok) {
-                    fetchMessages();
-                } else {
-                    const errData = await res.json();
-                    alert(errData.error || 'Failed to delete messages');
-                }
-            } catch (err) {
-                console.error('Error deleting all messages:', err);
             }
         });
     }
